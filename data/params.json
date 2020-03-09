@@ -1,0 +1,48 @@
+{
+	"search": {
+		"influencer": {
+			"category": "search[influencer_category][]",
+			"location": {
+				"type": "search[influencer_location][type]",
+				"id": "search[influencer_location][id]"
+			},
+			"gender": "search[influencer_gender]",
+			"age": {
+				"from": "search[influencer_age][from]",
+				"to": "search[influencer_age][to]"
+			},
+			"language": "search[influencer_language]",
+			"isverified": "search[is_verified]"
+		},
+		"audience": {
+			"location": {
+				"type": "search[audience_location][0][type]",
+				"id": "search[audience_location][0][id]",
+				"from": "search[audience_location][0][from]"
+			},
+			"gender": {
+				"id": "search[audience_gender][id]",
+				"from": "search[audience_gender][from]"	
+			},
+			"age": {
+				"from": "search[audience_age][from]",
+				"to": "search[audience_age][to]",
+				"p": "search[audience_age][p]"
+			}
+		},
+		"followers": {
+			"count": {
+				"from": "search[followers][from]",
+				"to": "search[followers][to]"
+			},
+			"er": {
+				"from": "search[er][from]"
+			}
+		},
+		"sort": {
+			"rfc": "sort[rfc]",
+			"followers": "sort[fc]"
+		},
+		"counter": "counter"
+	}
+}
