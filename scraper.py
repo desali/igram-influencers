@@ -25,6 +25,20 @@ class Scraper(object):
 
 	# Functions
 	def test_request(self):
+
+		keywords = [
+			"key:1",
+			"value:1"
+		]
+
+		payload = self.payload_maker(keywords)
+		response = self.request_search(payload)
+		self.read_response(response)
+
+
+	def payload_maker(keywords):
+		
+		# Payload with default(initial) values
 		payload = {
 			# type 0 is country
 			self.params["search"]["influencer"]["location"]["type"]: 0,
@@ -34,7 +48,16 @@ class Scraper(object):
 			self.params["search"]["sort"]["followers"]: "desc"
 		}
 
-		# Send requests with header and no payload
+		for key in keywords:
+			if(key.split(":")[0] == "key"):
+				print("hey")
+			elif(key == "value"):
+				print("value")
+
+		return payload
+
+	def request_search(payload):
+		# Send requests with header and payload
 		request = requests.get(self.BASE_URL, headers=self.HEADERS, params=payload)
 		response = request.json()
 
@@ -42,6 +65,9 @@ class Scraper(object):
 		with open('test_json.txt', 'w') as outfile:
 			json.dump(response, outfile)
 
+		return response
+
+	def read_response(response):
 		# Testing response data
 		accounts_count = response["total"]
 		accounts_list = response["data"]
@@ -58,23 +84,14 @@ class Scraper(object):
 			account_quality_score = account_json[6]["title"]
 			categories = account_json[7]
 
-			account = Account()
-			account.name = name
-			account.username = username
-			account.is_verified = is_verified
-			account.followers = followers
-			account.quality_followers = quality_followers
-			account.engagement_rate = engagement_rate
-			account.account_quality_score = account_quality_score
-			account.categories = categories
+			 
 
 			print(account)
 			print("\n")
 
 
-	def test(self):
-		# Test Outputs
-		print(self.params["search"]["audience"]["gender"]["from"])
+		max_followers_count = accounts_list[0][3]
+
 
 	def read_params(self):
 		with open('data/params.json') as params_json_file:

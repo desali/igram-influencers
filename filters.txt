@@ -1,0 +1,16 @@
+Account:
+1) Name
+2) Username
+3) Verified?
+4) Followers count
+5) Quality followers count
+6) Engagement rate
+7) Account quality score
+8) Categories
+9) Gender
+10) Age(interval)
+
+Audience:
+1) Age
+2) Gender
+3) City
