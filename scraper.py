@@ -54,7 +54,7 @@ class Scraper(object):
         response = request.json()
 
         # Writing response to file
-        with open('test_json.txt', 'w') as outfile:
+        with open('test_json.json', 'w') as outfile:
             json.dump(response, outfile)
 
         return response
