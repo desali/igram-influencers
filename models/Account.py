@@ -24,16 +24,20 @@ class Account(object):
             'quality_followers': self.quality_followers,
             'engagement_rate': self.engagement_rate,
             'account_quality_score': self.account_quality_score,
+            'gender': self.gender,
+            'age': self.age,
             'categories': self.categories
         }
 
         return '''\
-		Account name: {name}.
-		Account username: {username}.
-		Account is_verified: {is_verified}.
-		Account followers: {followers}.
-		Account quality_followers: {quality_followers}.
-		Account engagement_rate: {engagement_rate}.
-		Account account_quality_score: {account_quality_score}.
-		Account categories: {categories}.\
-		'''.format(**d)
+            Account name: {name}.
+            Account username: {username}
+            Account is_verified: {is_verified}.
+            Account followers: {followers}.
+            Account quality_followers: {quality_followers}.
+            Account engagement_rate: {engagement_rate}.
+            Account account_quality_score: {account_quality_score}.
+            Account gender: {gender}.
+            Account age: {age}.
+            Account categories: {categories}.\
+            '''.format(**d)

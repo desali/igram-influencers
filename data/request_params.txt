@@ -1,22 +1,25 @@
-search[influencer_category][]: 33
-search[influencer_location][type]: 0
-search[influencer_location][id]: 1522867
-search[influencer_gender]: 1
-search[influencer_age][from]: 18
-search[influencer_age][to]: 24
-search[influencer_language]: kk
-search[is_verified]: 1
-search[audience_location][0][type]: 1
-search[audience_location][0][id]: 1526384
-search[audience_location][0][from]: 90
-search[audience_gender][id]: 1
-search[audience_gender][from]: 90
-search[audience_age][from]: 13
-search[audience_age][to]: 64
-search[audience_age][p]: 10
-search[followers][from]: 2317
-search[followers][to]: 232132
-search[er][from]: -4.5
-sort[rfc]: desc
-sort[fc]
-counter: 1
+search[influencer_category][]: 33           |
+search[influencer_location][type]: 0        | static
+search[influencer_location][id]: 1522867    | static
+search[influencer_gender]: 1                | static
+search[influencer_age][from]: 18            |
+search[influencer_age][to]: 24              |
+search[influencer_language]: kk             |
+search[is_verified]: 1                      |
+
+search[audience_location][0][type]: 1       |
+search[audience_location][0][id]: 1526384   |
+search[audience_location][0][from]: 90      |
+search[audience_gender][id]: 1              |
+search[audience_gender][from]: 90           |
+search[audience_age][from]: 13              |
+search[audience_age][to]: 64                |
+search[audience_age][p]: 10                 |
+
+search[followers][from]: 2317               |
+search[followers][to]: 232132               |
+search[er][from]: -4.5                      |
+
+sort[rfc]: desc                             |
+sort[fc]                                    |
+counter: 1                                  |
