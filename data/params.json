@@ -31,13 +31,11 @@
       }
     },
     "followers": {
-      "count": {
-        "from": "search[followers][from]",
-        "to": "search[followers][to]"
-      },
-      "er": {
-        "from": "search[er][from]"
-      }
+      "from": "search[followers][from]",
+      "to": "search[followers][to]"
+    },
+    "er": {
+      "from": "search[er][from]"
     },
     "sort": {
       "rfc": "sort[rfc]",

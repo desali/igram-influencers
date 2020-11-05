@@ -4,7 +4,7 @@ import json
 import requests
 
 import config
-from models.Account import Account
+from scraping.models import Country, Account, Category
 
 
 class Scraper(object):
@@ -15,11 +15,13 @@ class Scraper(object):
         "cookie": config.COOKIE
     }
     params = {}
+    country = Country()
 
     # Init init values
-    def __init__(self):
+    def __init__(self, country_name):
         # Reading params for search
         self.read_params()
+        self.country = Country.objects.filter(title=country_name).first()
 
     # Functions
     def test_request(self):
@@ -32,6 +34,28 @@ class Scraper(object):
         response = self.request_search(payload)
         self.read_response(response)
 
+    def parse_all(self, max_followers_count=999999999):
+        max_followers = max_followers_count
+        accounts_left = 999999999
+
+        while accounts_left > 1:
+            keywords = {
+                # filter followers count to
+                self.params["search"]["followers"]["to"]: max_followers
+            }
+
+            payload = self.payload_maker(keywords)
+            response = self.request_search(payload)
+            result = self.read_response(response)
+
+            if result["data"] == "no_data":
+                print(f"Left accounts count: {accounts_left}")
+                print(f"Next max followers count: {max_followers}")
+                break
+
+            max_followers = result["data"]["max_followers"]
+            accounts_left = result["data"]["accounts_left"]
+
     def payload_maker(self, keywords):
         # Payload with default(initial) values
         payload = {
@@ -43,10 +67,7 @@ class Scraper(object):
             self.params["search"]["sort"]["followers"]: "desc"
         }
 
-        for key in keywords:
-            print(f"{key}: {keywords[key]}")
-
-        return payload
+        return {**payload, **keywords}
 
     def request_search(self, payload):
         # Send requests with header and payload
@@ -64,9 +85,25 @@ class Scraper(object):
         accounts_count = response["total"]
         accounts_list = response["data"]
 
-        print("Total accounts count: " + str(accounts_count) + "\n")
+        if len(accounts_list) < 1:
+            print("NO DATA NO DATA NO DATA")
+
+            return {
+                "data": "no_data"
+            }
+
+        max_followers_count = accounts_list[-1][3]
+
+        print("Left accounts count: " + str(accounts_count) + "\n")
+        print("Next max followers count: " + str(max_followers_count) + "\n")
 
         for account_json in accounts_list:
+            # Check if account exist continue
+            account = Account.objects.filter(username=account_json[2]["username"]).first()
+            if account:
+                continue
+
+            # Else create account
             account = Account()
             account.name = account_json[2]["name"]
             account.username = account_json[2]["username"]
@@ -75,12 +112,26 @@ class Scraper(object):
             account.quality_followers = account_json[4]
             account.engagement_rate = account_json[5]
             account.account_quality_score = account_json[6]["title"]
-            account.categories = account_json[7]
+            account.country = self.country
 
-            print(account)
-            print("\n\n")
+            # Save account
+            account.save()
 
-        max_followers_count = accounts_list[0][3]
+            # Set categories
+            categories = account_json[7]
+            categories = [Category.objects.filter(title=category).first().hype_id for category in categories]
+            account.categories.set(categories)
+
+            print(f"Creating account: {account.username}")
+            print(f"Followers count: {account.followers}")
+            print("\n")
+
+        return {
+            "data": {
+                "max_followers": max_followers_count,
+                "accounts_left": accounts_count
+            }
+        }
 
     def read_params(self):
         with open('data/params.json') as params_json_file:

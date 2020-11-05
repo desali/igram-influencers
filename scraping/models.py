@@ -27,7 +27,7 @@ class City(models.Model):
 
 
 class Category(models.Model):
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, unique=True)
     hype_id = models.CharField(max_length=255, unique=True)
 
     class Meta:
@@ -105,9 +105,9 @@ class Account(models.Model):
     username = models.CharField(max_length=255, unique=True)
     is_verified = models.BooleanField(default=False)
     followers = models.IntegerField()
-    quality_followers = models.IntegerField()
+    quality_followers = models.IntegerField(null=True, blank=True)
     engagement_rate = models.FloatField()
-    account_quality_score = models.FloatField()
+    account_quality_score = models.CharField(max_length=255)
 
     account_type = models.IntegerField(choices=ACCOUNT_TYPE_SELECT, default=0)
     contact_info = models.IntegerField(choices=CONTACT_INFO_SELECT, default=0)
@@ -117,8 +117,8 @@ class Account(models.Model):
     age = models.ForeignKey(AgeInterval, blank=True, null=True, on_delete=models.DO_NOTHING, default=None)
     city = models.ForeignKey(City, blank=True, null=True, on_delete=models.DO_NOTHING, default=None)
 
-    categories = models.ManyToManyField(Category, through='AccountCategory')
     languages = models.ManyToManyField(Language, through='AccountLanguage')
+    categories = models.ManyToManyField(Category, through='AccountCategory')
 
     class Meta:
         verbose_name = "Account"
@@ -130,7 +130,7 @@ class Account(models.Model):
 
 class AccountCategory(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
+    category = models.ForeignKey(Category, to_field="hype_id", on_delete=models.DO_NOTHING)
 
     class Meta:
         db_table = 'account_categories'
