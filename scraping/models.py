@@ -35,7 +35,8 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
 
     def __str__(self):
-        return self.title
+        # return self.hype_id + " " + self.title
+        return self.hype_id
 
 
 class GenderType(models.Model):

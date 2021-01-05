@@ -18,10 +18,11 @@ class Scraper(object):
     country = Country()
 
     # Init init values
-    def __init__(self, country_name):
+    def __init__(self, country_name, cookie):
         # Reading params for search
         self.read_params()
         self.country = Country.objects.filter(title=country_name).first()
+        self.HEADERS["cookie"] = cookie
 
     # Functions
     def test_request(self):
@@ -51,9 +52,14 @@ class Scraper(object):
             if result["data"] == "no_data":
                 print(f"Left accounts count: {accounts_left}")
                 print(f"Next max followers count: {max_followers}")
-                break
 
-            max_followers = result["data"]["max_followers"]
+                return max_followers
+
+            cur_max_followers = result["data"]["max_followers"]
+            if cur_max_followers == max_followers:
+                max_followers = max_followers - 1
+            else:
+                max_followers = cur_max_followers
             accounts_left = result["data"]["accounts_left"]
 
     def payload_maker(self, keywords):
@@ -62,7 +68,7 @@ class Scraper(object):
             # type 0 is country
             self.params["search"]["influencer"]["location"]["type"]: 0,
             # 1522867 id of Kazakhstan
-            self.params["search"]["influencer"]["location"]["id"]: 1522867,
+            self.params["search"]["influencer"]["location"]["id"]: self.country.hype_id,
             # Sort by followers count (desc - high to low)
             self.params["search"]["sort"]["followers"]: "desc"
         }
@@ -82,7 +88,6 @@ class Scraper(object):
 
     def read_response(self, response):
         # Testing response data
-        accounts_count = response["total"]
         accounts_list = response["data"]
 
         if len(accounts_list) < 1:
@@ -93,6 +98,7 @@ class Scraper(object):
             }
 
         max_followers_count = accounts_list[-1][3]
+        accounts_count = response["total"]
 
         print("Left accounts count: " + str(accounts_count) + "\n")
         print("Next max followers count: " + str(max_followers_count) + "\n")
